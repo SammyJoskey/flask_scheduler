@@ -1,4 +1,4 @@
-# fПланировщик событий на flask
+# Планировщик событий на flask
 
 # Heroku: https://tortscheduler.herokuapp.com/
 

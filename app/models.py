@@ -1,25 +1,34 @@
 from sqlalchemy import *
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import relationship, sessionmaker
-
 from app import db
+from flask_login import UserMixin
+
+
+class User(db.Model, UserMixin):
+    __tablename__ = 'users'
+
+    _id = Column(Integer, primary_key=True)
+    username = Column(String(30), unique=True)
+    email = Column(String(100), unique=True, nullable=False)
+    password = Column(String)
+    authenticated = Column(Boolean, default=False)
+
+    def get_id(self):
+        return self._id
+
+    def is_authenticated(self):
+        return self.authenticated
 
 
 class Event(db.Model):
-    __tablename__ = 'event'
+    __tablename__ = 'events'
+
     _id = Column(Integer, primary_key=True)
-    start = Column(DateTime, unique=False, nullable=False)
-    end = Column(DateTime, unique=False, nullable=False)
-    author = Column(String(20), unique=False, nullable=False)
+    date_start = Column(DateTime, unique=False, nullable=False)
+    date_end = Column(DateTime, unique=False, nullable=False)
+    author = Column(Integer, ForeignKey('users._id'), nullable=False)
     subject = Column(String(80), unique=False, nullable=False)
     description = Column(String(300), unique=False, nullable=True)
 
-
-class User(db.Model):
-    __tablename__ = 'user'
-
-    email = db.Column(db.String, primary_key=True)
-    password = db.Column(db.String)
-
-    def get_id(self):
-        return self.email
+    def get_author(self):
+        user = User.query.filter(User._id == self.author).first()
+        return user.username

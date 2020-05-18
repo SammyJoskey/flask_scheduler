@@ -10,9 +10,6 @@
 {% block content %}
 
 {% if current_user.is_authenticated %}
-{% if events %}
-{% for event in events %}
-
 <table class="table table-striped table-dark">
     <tr>
         <td style="width: 10px;"> #</td>
@@ -24,7 +21,8 @@
         <td style="width: 150px;"></td>
     </tr>
 </table>
-
+{% if events %}
+{% for event in events %}
 <table class="table table-striped table-light table-bordered">
     <tr>
         <td style="width: 10px;"> {{ event._id }}</td>
